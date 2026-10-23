@@ -1,4 +1,4 @@
-class_name VirtualJoystick
+class_name VibeVirtualJoystick
 
 extends Control
 
@@ -32,7 +32,7 @@ enum Visibility_mode {
 }
 
 ## If the joystick is always visible, or is shown only if there is a touchscreen
-@export var visibility_mode := Visibility_mode.ALWAYS
+@export var visibility_mode := Visibility_mode.TOUCHSCREEN_ONLY
 
 ## If true, the joystick uses Input Actions (Project -> Project Settings -> Input Map)
 @export var use_input_actions := true
@@ -52,6 +52,17 @@ var output := Vector2.ZERO
 
 # PRIVATE VARIABLES
 
+## Deterministic, eval-free, CACHED for the whole session. Web exports report
+## is_touchscreen_available()=true in every desktop Chrome ("ontouchstart"
+## exists), so the web branch returns false (desktop web = no touch HUD) and
+## native builds use the "mobile" feature or the real display capability.
+## No JavaScriptBridge.eval on purpose: an eval from an input/per-frame path
+## can deadlock the synchronous JS -> WASM boundary and freeze the game, and
+## a re-evaluated verdict could flip visibility mid-press and strand
+## _touch_index, leaving the move actions stuck down.
+var _touch_ok := false
+var _touch_checked := false
+
 var _touch_index : int = -1
 
 @onready var _base := $Base
@@ -70,11 +81,22 @@ func _ready() -> void:
 	if not ProjectSettings.get_setting("input_devices/pointing/emulate_touch_from_mouse"):
 		printerr("The Project Setting 'emulate_touch_from_mouse' should be set to True")
 	
-	if not DisplayServer.is_touchscreen_available() and visibility_mode == Visibility_mode.TOUCHSCREEN_ONLY :
+	if visibility_mode == Visibility_mode.TOUCHSCREEN_ONLY and not _is_touch_device():
 		hide()
 	
 	if visibility_mode == Visibility_mode.WHEN_TOUCHED:
 		hide()
+
+func _is_touch_device() -> bool:
+	if not _touch_checked:
+		_touch_checked = true
+		_touch_ok = _compute_touch_device()
+	return _touch_ok
+
+func _compute_touch_device() -> bool:
+	if OS.has_feature("web"):
+		return false
+	return OS.has_feature("mobile") or DisplayServer.is_touchscreen_available()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
