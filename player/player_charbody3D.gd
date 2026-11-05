@@ -116,7 +116,47 @@ enum state {FREE,STATIC,CLIMB}
 @onready var current_state = state.STATIC : set = change_state
 signal changed_state(new_state: state)
 
+## Model-agnostic bone wiring: resolve the equipped model skeleton at runtime
+## and point every BoneAttachment3D at it, so weapons/gadgets/items/footsteps
+## follow the bones after ANY model swap (no hard-coded skeleton paths).
+func _rewire_bone_attachments() -> void:
+	var skel := _find_skeleton(self)
+	if skel == null:
+		return
+	for ba in _collect_attachments(self):
+		ba.use_external_skeleton = true
+		ba.external_skeleton = ba.get_path_to(skel)
+		var bn: String = ba.bone_name
+		if bn == "":
+			continue
+		if skel.find_bone(bn) < 0:
+			# NO silent fallback: report the exact missing bone and leave the
+			# attachment unbound — substituting a different bone would mislead
+			push_warning("BoneAttachment '%s': bone '%s' missing on equipped model — left unbound" % [ba.name, bn])
+			continue
+		# re-resolve the bone index from the NAME on the new skeleton —
+		# stale authored bone_idx values point at different bones after a swap
+		ba.bone_name = bn
+
+func _find_skeleton(n: Node) -> Skeleton3D:
+	if n is Skeleton3D:
+		return n
+	for c in n.get_children():
+		var x := _find_skeleton(c)
+		if x != null:
+			return x
+	return null
+
+func _collect_attachments(n: Node) -> Array:
+	var out := []
+	if n is BoneAttachment3D:
+		out.append(n)
+	for c in n.get_children():
+		out.append_array(_collect_attachments(c))
+	return out
+
 func _ready():
+	_rewire_bone_attachments()
 	if animation_tree:
 		animation_tree.animation_measured.connect(_on_animation_measured)
 		

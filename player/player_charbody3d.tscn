@@ -1811,7 +1811,6 @@ stored_mount_point = NodePath("BackBone/BackPivot")
 [node name="RightHand" type="BoneAttachment3D" parent="WeaponSystem"]
 transform = Transform3D(-0.513748, -0.0752878, 0.857577, -0.461358, -0.771134, -0.368977, 0.745089, -0.60544, 0.371827, -0.357774, 0.856991, -0.0247592)
 bone_name = "RightHand"
-bone_idx = 32
 use_external_skeleton = true
 external_skeleton = NodePath("../../minnyquinn/godot_rig/GeneralSkeleton")
 
@@ -1823,7 +1822,6 @@ transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, 
 [node name="BackBone" type="BoneAttachment3D" parent="WeaponSystem"]
 transform = Transform3D(1, 1.83395e-08, -1.7343e-09, -1.81789e-08, 0.967234, -0.253886, -2.97867e-09, 0.253886, 0.967234, 3.41321e-09, 1.20232, 0.0108221)
 bone_name = "UpperChest"
-bone_idx = 4
 use_external_skeleton = true
 external_skeleton = NodePath("../../minnyquinn/godot_rig/GeneralSkeleton")
 
@@ -1867,7 +1865,6 @@ stored_mount_point = NodePath("HipBone/HipPivot")
 [node name="LeftHand" type="BoneAttachment3D" parent="GadgetSystem"]
 transform = Transform3D(-0.400218, -0.216113, -0.893422, 0.400805, -0.87676, -0.00117934, -0.855671, -0.385138, 0.444456, 0.351966, 0.867303, 0.0400459)
 bone_name = "LeftHand"
-bone_idx = 13
 use_external_skeleton = true
 external_skeleton = NodePath("../../minnyquinn/godot_rig/GeneralSkeleton")
 
@@ -1879,7 +1876,6 @@ transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.0
 [node name="HipBone" type="BoneAttachment3D" parent="GadgetSystem"]
 transform = Transform3D(1, 1.58652e-08, -1.83552e-10, -1.56653e-08, 0.985429, -0.170089, -2.51762e-09, 0.170089, 0.985429, 1.17221e-09, 1.06241, -0.00876002)
 bone_name = "Chest"
-bone_idx = 3
 use_external_skeleton = true
 external_skeleton = NodePath("../../minnyquinn/godot_rig/GeneralSkeleton")
 
@@ -1922,7 +1918,6 @@ signaling_node = NodePath("../InventorySystem")
 [node name="HandBone" type="BoneAttachment3D" parent="ItemSystem"]
 transform = Transform3D(-0.400218, -0.216113, -0.893422, 0.400805, -0.87676, -0.00117934, -0.855671, -0.385138, 0.444456, 0.351966, 0.867304, 0.0400459)
 bone_name = "LeftHand"
-bone_idx = 13
 use_external_skeleton = true
 external_skeleton = NodePath("../../minnyquinn/godot_rig/GeneralSkeleton")
 
@@ -1932,7 +1927,6 @@ transform = Transform3D(-0.0169522, -0.991058, -0.132351, 0.125911, -0.133433, 0
 [node name="StorageBone" type="BoneAttachment3D" parent="ItemSystem"]
 transform = Transform3D(1, 4.96216e-09, 1.05652e-09, -4.85434e-09, 0.996377, -0.0850402, -1.47467e-09, 0.0850402, 0.996377, 5.45314e-10, 0.94105, -0.0343734)
 bone_name = "Spine"
-bone_idx = 2
 use_external_skeleton = true
 external_skeleton = NodePath("../../minnyquinn/godot_rig/GeneralSkeleton")
 
